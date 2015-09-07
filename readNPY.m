@@ -27,7 +27,19 @@ try
     dtypesMatlab = {'uint8','uint16','uint32','uint64','int8','int16','int32','int64','single','double'};
     dtypesNPY = {'|u1', '<u2', '<u4', '<u8', '|i1', '<i2', '<i4', '<i8', '<f4', '<f8'};
     
+    singleQuotes = find(arrayFormat=='''');
+    dtNPY = arrayFormat(singleQuotes(3)+1:singleQuotes(3)+3)
     
+    dtMatlab = dtypesMatlab{strcmp(dtNPY, dtypesNPY)}
+    
+    openParen = find(arrayFormat=='(');
+    commas = find(arrayFormat==',');
+    shape1 = str2num(arrayFormat(openParen(1)+1:commas(find(commas>openParen(1),1))-1))
+    
+    shape2 = 1;
+    
+    %data = fread(fid, [shape1 shape2], ['''' dtMatlab '=>' dtMatlab '''']);
+    data = fread(fid, [shape1 shape2], dtMatlab);
     
     fclose(fid)
     
