@@ -12,3 +12,15 @@ for d = 1:length(dtypes)
     title(dtypes{d});
     
 end
+
+
+figure; 
+for d = 1:length(dtypes)
+    
+    data = readNPY(['data/chelsea_' dtypes{d} '.npy']); 
+    
+    subplot(length(dtypes),1,d)
+    image(data./255)
+    title(dtypes{d});
+    
+end

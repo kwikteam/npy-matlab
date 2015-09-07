@@ -20,7 +20,7 @@ try
     
     majorVersion = fread(fid, [1 1], 'uint8=>uint8');
     minorVersion = fread(fid, [1 1], 'uint8=>uint8');
-    headerLength = fread(fid, [1 1], 'uint16=>unit16')
+    headerLength = fread(fid, [1 1], 'uint16=>unit16');
     
     arrayFormat = fread(fid, [1 headerLength], 'char=>char')
     
@@ -28,20 +28,34 @@ try
     dtypesNPY = {'|u1', '<u2', '<u4', '<u8', '|i1', '<i2', '<i4', '<i8', '<f4', '<f8'};
     
     singleQuotes = find(arrayFormat=='''');
-    dtNPY = arrayFormat(singleQuotes(3)+1:singleQuotes(3)+3)
+    dtNPY = arrayFormat(singleQuotes(3)+1:singleQuotes(3)+3);
     
-    dtMatlab = dtypesMatlab{strcmp(dtNPY, dtypesNPY)}
+    dtMatlab = dtypesMatlab{strcmp(dtNPY, dtypesNPY)};
     
+    % parse the shape of the array
     openParen = find(arrayFormat=='(');
     commas = find(arrayFormat==',');
-    shape1 = str2num(arrayFormat(openParen(1)+1:commas(find(commas>openParen(1),1))-1))
+    closeParen = find(arrayFormat==')');
     
-    shape2 = 1;
+    startShape = openParen(1);
+    thisComma = commas(find(commas>startShape,1));
+    n = 1;
+    while thisComma<=closeParen && thisComma>startShape+1
+        shape(n) = str2num(arrayFormat(startShape+1:thisComma-1));
+        startShape = thisComma;
+        thisComma = min(commas(find(commas>startShape,1)), closeParen);
+        n = n+1;
+    end
+        
+    % read the data
+    data = fread(fid, prod(shape), dtMatlab);
     
-    %data = fread(fid, [shape1 shape2], ['''' dtMatlab '=>' dtMatlab '''']);
-    data = fread(fid, [shape1 shape2], dtMatlab);
+    if length(shape)>1
+        data = reshape(data, shape(end:-1:1));
+        data = permute(data, [length(shape):-1:1]);
+    end
     
-    fclose(fid)
+    fclose(fid);
     
 catch me
     fclose(fid);
