@@ -18,9 +18,9 @@ figure;
 for d = 1:length(dtypes)
     
     data = readNPY(['data/chelsea_' dtypes{d} '.npy']); 
-    
+    data(1:3,1:3,:)
     subplot(length(dtypes),1,d)
-    image(data./255)
+    imagesc(double(data)./255)
     title(dtypes{d});
     
 end
