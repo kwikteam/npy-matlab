@@ -32,7 +32,7 @@ try
     
     totalHeaderLength = 10+headerLength;
     
-    arrayFormat = fread(fid, [1 headerLength], 'char=>char')
+    arrayFormat = fread(fid, [1 headerLength], 'char=>char');
     
     % to interpret the array format info, we make some pretty strict
     % assumptions about it:
