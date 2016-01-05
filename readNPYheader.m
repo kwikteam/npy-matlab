@@ -20,7 +20,7 @@ try
     magicString = fread(fid, [1 6], 'char=>char');
     
     if ~strcmp(magicString, '“NUMPY')
-        error('readNPY:NotNUMPYFile', 'Error: This file does not appear to be NUMPY format.');
+        error('readNPY:NotNUMPYFile', 'Error: This file does not appear to be NUMPY format based on the header.');
     end
     
     majorVersion = fread(fid, [1 1], 'uint8=>uint8');
