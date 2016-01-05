@@ -18,6 +18,6 @@ else
     f = memmapfile(filename, 'Format', {dataType, arrayShape(end:-1:1), 'd'}, 'Offset', totalHeaderLength);
     
     tmp = f.Data.d;
-    img = permute(tmp, [3 2 1]); % note here you have to reverse the dimensions. 
+    img = permute(tmp, length(arrayShape):-1:1); % note here you have to reverse the dimensions. 
     image(img./255)
 end

@@ -2,8 +2,7 @@
 
 function data = readNPY(filename)
 % Function to read NPY files into matlab. 
-% *** Only reads a subset of all possible NPY files, specifically 1- and
-% 2-D arrays of certain data types. 
+% *** Only reads a subset of all possible NPY files, specifically N-D arrays of certain data types. 
 % See https://github.com/kwikteam/npy-matlab/blob/master/npy.ipynb for
 % more. 
 %
