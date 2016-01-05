@@ -34,51 +34,22 @@ try
     
     arrayFormat = fread(fid, [1 headerLength], 'char=>char');
     
-    % to interpret the array format info, we make some pretty strict
-    % assumptions about it:
-    % - has three fields: descr, fortran_order, and shape
-    % - all arguments open with colon and close with comma
-    % - descr argument is surrounded by single quotes and terminated by comma
-    % - fortran_order argument is either 'True' or not
-    % - shape argument is enclosed in parens
+    % to interpret the array format info, we make some fairly strict
+    % assumptions about its format...
     
-    descrPlace = strfind(arrayFormat, 'descr');
-    openQuote = find(1:length(arrayFormat)>descrPlace+5 & arrayFormat=='''');
-    closeQuote = find(1:length(arrayFormat)>openQuote(1) & arrayFormat=='''');
-    dtNPY = arrayFormat(openQuote(1)+1:closeQuote(1)-1);
-    
-    % singleQuotes = find(arrayFormat=='''');
-    % dtNPY = arrayFormat(singleQuotes(3)+1:singleQuotes(3)+3);
+    r = regexp(arrayFormat, '''descr''\s*:\s*''(.*?)''', 'tokens');
+    dtNPY = r{1}{1};    
     
     littleEndian = ~strcmp(dtNPY(1), '>');
     
     dataType = dtypesMatlab{strcmp(dtNPY(2:3), dtypesNPY)};
+        
+    r = regexp(arrayFormat, '''fortran_order''\s*:\s*(\w+)', 'tokens');
+    fortranOrder = strcmp(r{1}{1}, 'True');
     
-    
-    orderPlace = strfind(arrayFormat, 'fortran_order');
-    comma = find(1:length(arrayFormat)>orderPlace+14 & arrayFormat==',');
-    fortranOrder = ~isempty(strfind(arrayFormat(orderPlace+14:comma-1), 'True'));
-    
-    
-    shapePlace = strfind(arrayFormat, 'shape');
-    openParen =  find(1:length(arrayFormat)>shapePlace+5 & arrayFormat=='(');
-    closeParen =  find(1:length(arrayFormat)>openParen+1 & arrayFormat==')');
-    arrayShape = str2num(arrayFormat(openParen+1:closeParen-1));
-    
-    % parse the shape of the array
-    % openParen = find(arrayFormat=='(');
-    % commas = find(arrayFormat==',');
-    % closeParen = find(arrayFormat==')');
-    %
-    % startShape = openParen(1);
-    % thisComma = commas(find(commas>startShape,1));
-    % n = 1;
-    % while thisComma<=closeParen && thisComma>startShape+1
-    %     shape(n) = str2num(arrayFormat(startShape+1:thisComma-1));
-    %     startShape = thisComma;
-    %     thisComma = min(commas(find(commas>startShape,1)), closeParen);
-    %     n = n+1;
-    % end
+    r = regexp(arrayFormat, '''shape''\s*:\s*\((.*?)\)', 'tokens');
+    arrayShape = str2num(r{1}{1});
+
     
     fclose(fid);
     
