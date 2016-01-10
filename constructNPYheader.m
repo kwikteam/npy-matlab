@@ -1,10 +1,15 @@
 
 
 
-function header = constructNPYheader(dataType, shape)
+function header = constructNPYheader(dataType, shape, varargin)
 
-    fortranOrder = true;
-    littleEndian = true;
+	if ~isempty(varargin)
+		fortranOrder = varargin{1}; % must be true/false
+		littleEndian = vararing{2}; % must be true/false
+	else
+		fortranOrder = true;
+		littleEndian = true;
+	end
 
     dtypesMatlab = {'uint8','uint16','uint32','uint64','int8','int16','int32','int64','single','double'};
     dtypesNPY = {'u1', 'u2', 'u4', 'u8', 'i1', 'i2', 'i4', 'i8', 'f4', 'f8'};
@@ -72,7 +77,9 @@ function header = constructNPYheader(dataType, shape)
     headerLengthPadded = ceil(double(totalHeaderLength+1)/16)*16; % the whole thing should be a multiple of 16
                                                                   % I add 1 to the length in order to allow for the newline character
 
+	% format specification is that headerlen is little endian. I believe it comes out so using this command...
     headerLength = typecast(int16(headerLengthPadded-10), 'uint8');
+	
     zeroPad = zeros(1,headerLengthPadded-totalHeaderLength, 'uint8')+uint8(32); % +32 so they are spaces
     zeroPad(end) = uint8(10); % newline character
     
