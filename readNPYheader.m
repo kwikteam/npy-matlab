@@ -11,6 +11,15 @@ function [arrayShape, dataType, fortranOrder, littleEndian, totalHeaderLength, n
 
 fid = fopen(filename);
 
+% verify that the file exists
+if (fid == -1)
+    if ~isempty(dir(filename))
+        error('Permission denied: %s', filename);
+    else
+        error('File not found: %s', filename);
+    end
+end
+
 try
     
     dtypesMatlab = {'uint8','uint16','uint32','uint64','int8','int16','int32','int64','single','double'};
