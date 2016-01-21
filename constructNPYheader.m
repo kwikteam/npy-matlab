@@ -11,8 +11,8 @@ function header = constructNPYheader(dataType, shape, varargin)
 		littleEndian = true;
 	end
 
-    dtypesMatlab = {'uint8','uint16','uint32','uint64','int8','int16','int32','int64','single','double'};
-    dtypesNPY = {'u1', 'u2', 'u4', 'u8', 'i1', 'i2', 'i4', 'i8', 'f4', 'f8'};
+    dtypesMatlab = {'uint8','uint16','uint32','uint64','int8','int16','int32','int64','single','double', 'logical'};
+    dtypesNPY = {'u1', 'u2', 'u4', 'u8', 'i1', 'i2', 'i4', 'i8', 'f4', 'f8', 'b1'};
 
     magicString = uint8([147 78 85 77 80 89]); %x93NUMPY
     
