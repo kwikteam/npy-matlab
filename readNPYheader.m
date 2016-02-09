@@ -2,7 +2,7 @@
 
 function [arrayShape, dataType, fortranOrder, littleEndian, totalHeaderLength, npyVersion] = readNPYheader(filename)
 % function [arrayShape, dataType, fortranOrder, littleEndian, ...
-%       totalHeaderLength, npyVersion] = readNPYheader(fid)
+%       totalHeaderLength, npyVersion] = readNPYheader(filename)
 %
 % parse the header of a .npy file and return all the info contained
 % therein.
@@ -57,7 +57,8 @@ try
     fortranOrder = strcmp(r{1}{1}, 'True');
     
     r = regexp(arrayFormat, '''shape''\s*:\s*\((.*?)\)', 'tokens');
-    arrayShape = str2num(r{1}{1});
+    shapeStr = r{1}{1}; 
+    arrayShape = str2num(shapeStr(shapeStr~='L'));
 
     
     fclose(fid);
