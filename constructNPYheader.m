@@ -5,7 +5,7 @@ function header = constructNPYheader(dataType, shape, varargin)
 
 	if ~isempty(varargin)
 		fortranOrder = varargin{1}; % must be true/false
-		littleEndian = vararing{2}; % must be true/false
+		littleEndian = varargin{2}; % must be true/false
 	else
 		fortranOrder = true;
 		littleEndian = true;
