@@ -1,6 +1,6 @@
 # npy-matlab
 
-Experimental code to read/write NumPy .NPY files in MATLAB
+Code to read/write NumPy .NPY files in MATLAB
 
 
 ## Usage example:
