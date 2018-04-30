@@ -26,9 +26,9 @@ try
     dtypesNPY = {'u1', 'u2', 'u4', 'u8', 'i1', 'i2', 'i4', 'i8', 'f4', 'f8', 'b1'};
     
     
-    magicString = fread(fid, [1 6], 'char=>char');
+    magicString = fread(fid, [1 6], 'uint8=>uint8');
     
-    if ~strcmp(magicString, '“NUMPY')
+    if ~all(magicString == [147,78,85,77,80,89])
         error('readNPY:NotNUMPYFile', 'Error: This file does not appear to be NUMPY format based on the header.');
     end
     
