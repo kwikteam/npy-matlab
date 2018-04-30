@@ -37,7 +37,7 @@ try
     
     npyVersion = [majorVersion minorVersion];
     
-    headerLength = fread(fid, [1 1], 'uint16=>unit16');
+    headerLength = fread(fid, [1 1], 'uint16=>uint16');
     
     totalHeaderLength = 10+headerLength;
     
