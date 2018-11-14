@@ -1,0 +1,38 @@
+# Using several other .travis.yml files as inspiration. See for example:
+# https://github.com/MOxUnit/MOxUnit
+# https://github.com/scottclowe/matlab-continuous-integration/
+# https://github.com/fieldtrip/fieldtrip/blob/master/.travis.yml
+
+language: python
+
+cache:
+    - apt
+
+before_install:
+    # to prevent IPv6 being used for APT
+    - sudo bash -c "echo 'Acquire::ForceIPv4 \"true\";' > /etc/apt/apt.conf.d/99force-ipv4"
+    - travis_retry sudo apt-get -y -qq update
+    - travis_retry sudo apt-get install -y -qq software-properties-common python-software-properties
+    - travis_retry sudo apt-add-repository -y ppa:octave/stable
+    - travis_retry sudo apt-get -y -qq update
+    # get Octave 4.0
+    - travis_retry sudo apt-get -y -qq install octave liboctave-dev
+
+    # Get conda
+    - wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+    - chmod +x miniconda.sh
+    - ./miniconda.sh -b -p /home/travis/miniconda
+    - export PATH=/home/travis/miniconda/bin:$PATH
+    - conda update --yes --quiet conda
+
+install:
+    - conda create -n testenv --yes python=3.6
+    - source activate testenv
+    - conda install --yes --quiet numpy
+    - conda install --yes -c conda-forge scikit-image
+    - pip install pytest==3.3.2 pytest-sugar
+
+script:
+    - echo "Octave version:"
+    - octave --no-gui --eval "version()"
+    - pytest
