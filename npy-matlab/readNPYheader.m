@@ -47,6 +47,9 @@ try
     % assumptions about its format...
     
     r = regexp(arrayFormat, '''descr''\s*:\s*''(.*?)''', 'tokens');
+    if isempty(r)
+        error('Couldn''t parse array format: "%s"', arrayFormat);
+    end
     dtNPY = r{1}{1};    
     
     littleEndian = ~strcmp(dtNPY(1), '>');
