@@ -15,12 +15,16 @@ else
     fid = fopen(filename, 'r', 'b');
 end
 
+ishalf = strcmp(dataType, 'half');
+if ishalf; dataType = 'uint16'; end
+
 try
 
     [~] = fread(fid, totalHeaderLength, 'uint8');
 
     % read the data
     data = fread(fid, prod(shape), [dataType '=>' dataType]);
+    if ishalf; data = half.typecast(data); end
 
     if length(shape)>1 && ~fortranOrder
         data = reshape(data, shape(end:-1:1));
