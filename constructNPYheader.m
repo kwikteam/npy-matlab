@@ -63,7 +63,7 @@ function header = constructNPYheader(dataType, shape, varargin)
 
     for s = 1:length(shape)
         dictString = [dictString num2str(shape(s))];
-        if s<length(shape)
+        if s<length(shape) || s==1
             dictString = [dictString ', '];
         end
     end
